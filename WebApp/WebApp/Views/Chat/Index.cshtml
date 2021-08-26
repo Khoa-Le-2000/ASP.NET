@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var userName = User.Identity.Name as string;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-4"><input type="hidden" id="userInput" value="@userName" /></div>
+    </div>
+    <div class="row">
+        <div class="col-2 text-dark">Message</div>
+        <div class="col-4"><input class="form-control" type="text" id="messageInput" /></div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">
+            <input class="btn btn-dark" type="button" id="sendButton" value="Send Message" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="messagesList"></ul>
+    </div>
+</div>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>

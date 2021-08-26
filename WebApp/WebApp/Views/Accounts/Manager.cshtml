@@ -1,0 +1,67 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model WebApp.Models.Account
+
+@{
+    var notiFullName = TempData["NotiFullName"] as string;
+    var errorFullName = TempData["ErrorFullName"] as string;
+    var notiPassWord = TempData["NotiPassword"] as string;
+    var errorPassWord = TempData["errorPassword"] as string;
+}
+
+<h1>Manager Account</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="changeFullName">
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" value="@User.Identity.Name"/>
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            @if (!string.IsNullOrEmpty(notiFullName))
+            {
+                <p class="text-success">@notiFullName</p>
+            }
+            @if (!string.IsNullOrEmpty(errorFullName))
+            {
+                <p class="text-danger">@errorFullName</p>
+            }
+            <div class="form-group">
+                <input type="submit" value="Change full name" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="changePassword">
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Old Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">New Password</label>
+                <input id="NewPassword" type="Password" name="NewPassword" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label">Confirm new Password</label>
+                <input id="ConfirmNewPassword" type="Password" name="ConfirmNewPassword" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            @if (!string.IsNullOrEmpty(notiPassWord))
+            {
+                <p class="text-success">@notiPassWord</p>
+            }
+            @if (!string.IsNullOrEmpty(errorPassWord))
+            {
+                <p class="text-danger">@errorPassWord</p>
+            }
+            <div class="form-group">
+                <input type="submit" value="Change password" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

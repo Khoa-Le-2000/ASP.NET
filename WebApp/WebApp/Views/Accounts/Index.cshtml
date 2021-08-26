@@ -1,0 +1,166 @@
+﻿@model IEnumerable<WebApp.Models.Account>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var pageSize = int.Parse(ViewData["PageSize"].ToString());
+    var totalPage = int.Parse(ViewData["TotalPage"].ToString());
+    var pageCurrent = int.Parse(ViewData["PageCurrent"].ToString());
+    var valueSearch = ViewData["ValueSearch"];
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<div class="navbar navbar-expand-sm mb-3">
+    <div class="container">
+        <div class="form-group" style="left:0; width:100%; margin-left:-32px" action="" method="get" id="SetPageSize">
+            <label class="control-label">Page Size</label>
+            <select class="form-control col-2" id="PageSize" name="PageSize">
+                @if (pageSize == 10)
+                {
+                    <option value="/Accounts/1/10" selected>10</option>
+                }
+                else
+                {
+                    <option value="/Accounts/1/10">10</option>
+                }
+                @if (pageSize == 25)
+                {
+                    <option value="/Accounts/1/25" selected>25</option>
+                }
+                else
+                {
+                    <option value="/Accounts/1/25">25</option>
+                }
+                @if (pageSize == 100)
+                {
+                    <option value="/Accounts/1/100" selected>100</option>
+                }
+                else
+                {
+                    <option value="/Accounts/1/100">100</option>
+                }
+            </select>
+        </div>
+        <div class="form-group" style=" position: absolute; right: 0; text-align: right">
+            <label class="control-label">Search</label>
+            <input id="search" type="search" class="form-control" value="@valueSearch" />
+        </div>
+        <script>
+            var textSearch = document.getElementById("search").value;
+            document.getElementById("search").addEventListener("keyup", (function (event) {
+                if (event.keyCode === 13) {
+                    location.href = "/Accounts/1/" + @pageSize + "?search=" + this.value;
+                }
+            }));
+            document.getElementById("search").addEventListener("focusout", (function () {
+                if (this.value != textSearch)
+                    location.href = "/Accounts/1/" + @pageSize + "?search=" + this.value;
+            }));
+
+            document.getElementById("PageSize").onchange = function () {
+                if (textSearch == "")
+                    location.href = this.value;
+                else
+                    location.href = this.value + "?search=" + textSearch;
+            }
+        </script>
+    </div>
+</div>
+
+<marquee>
+    @foreach (var item in Model)
+    {
+        <h6 style="display:inline-block; margin-right:50px">
+            <a>@item.FullName</a>
+        </h6>
+    }
+</marquee>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Permission.PermissionName)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Permission.PermissionName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AccountId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.AccountId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.AccountId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center">
+    @if (totalPage <= 7)
+    {
+        @for (int i = 1; i <= totalPage; i++)
+        {
+            <a class="btn btn-light" id="Page_@i" asp-controller="Accounts" asp-action="Index" asp-route-page="@i" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@i</a>
+        }
+        <script>
+            document.getElementById("Page_@pageCurrent").classList.remove("btn-light");
+            document.getElementById("Page_@pageCurrent").classList.add("btn-dark");
+        </script>
+    }
+    else
+    {
+        <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="1" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">|&lt;</a>
+        if (pageCurrent > 2)
+        {
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@(pageCurrent - 2)" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">...</a>
+        }
+
+        if (pageCurrent == 1)
+        {
+            <a class="btn btn-dark" asp-controller="Accounts" asp-action="Index" asp-route-page="1" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">1</a>
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="2" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">2</a>
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="3" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">3</a>
+        }
+        else if (pageCurrent == totalPage)
+        {
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@(totalPage-2)" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@(totalPage-2)</a>
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@(totalPage-1)" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@(totalPage-1)</a>
+            <a class="btn btn-dark" asp-controller="Accounts" asp-action="Index" asp-route-page="@totalPage" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@totalPage</a>
+        }
+        else
+        {
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@(pageCurrent - 1)" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@(pageCurrent - 1)</a>
+            <a class="btn btn-dark" asp-controller="Accounts" asp-action="Index" asp-route-page="@pageCurrent" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@pageCurrent</a>
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@(pageCurrent + 1)" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">@(pageCurrent + 1)</a>
+        }
+
+        if (pageCurrent < totalPage - 1)
+        {
+            <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@(pageCurrent + 2)" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">...</a>
+        }
+        <a class="btn btn-light" asp-controller="Accounts" asp-action="Index" asp-route-page="@totalPage" asp-route-pagesize="@pageSize" asp-route-search="@valueSearch">&gt;|</a>
+    }
+</div>

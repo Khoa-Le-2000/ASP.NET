@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebApp.Models.Answer>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var voteId = ViewData["VoteId"] as string;
+    var index = 1;
+}
+
+<h1>Voting</h1>
+
+@foreach (var item in Model)
+{
+    <button id="@index" class="form-control btn btn-info" style="margin:20px" name="choose" href="#" onclick="choose(@(index++))">@item.Content</button>
+}
+
+<style>
+    .btn-not-choose:disabled {
+        color: #fff;
+        background-color: #6c757d;
+        border-color: #6c757d;
+        margin: 20px;
+    }
+
+    .btn-choose:disabled {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+        margin: 20px;
+        opacity: 1;
+    }
+
+    .btn-choose {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    
+    .btn-choose:focus {
+        color: #fff;
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+</style>
+
+<script>
+    function block() {
+        var list = document.getElementsByName("choose");
+        for (var i = 0; i < list.length; i++) {
+            list[i].classList.remove("btn-info");
+            list[i].classList.add("btn-not-choose");
+            list[i].disabled = true;
+        }
+    }
+
+    function choose(index) {
+        console.log("tet");
+        block();
+        document.getElementById(index).classList.remove("btn-not-choose");
+        document.getElementById(index).classList.add("btn-choose");
+    }
+</script>
